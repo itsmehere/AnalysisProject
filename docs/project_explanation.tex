@@ -60,7 +60,80 @@ There are many aspects of the code that we had to come up with in order to displ
 
 \subsection*{Coordinate Setup}
 
+\begin{figure}[!htb]
+    \centering
+    \subfloat[\centering]{{\includegraphics[width=5cm]{cartesianCoordinates} }}%
+    \qquad
+    \subfloat[\centering]{{\includegraphics[width=5cm]{computerCoordinates} }}%
+    \caption{Coordinates}%
+    \label{fig:example}%
+\end{figure}
 
+In the figures above, we see (a): our regular cartesian coordinate system where (0,0) is at the center of the screen and we have 4 quadrants. However, in figure (b), we see a generic computer coordinate system--where (only the 4th quadrant is included making the origin the top left of the screen. Though it may seem more complex to display animations at a point other than the origin, computer screen layouts actually make this problem easier(with a little bit more math of course) since we no longer have to deal with negative values. So why is this important? Well, if we wanted to display an object at the center of the screen, or in fact, any point other than the origin, we'd have to come up with some sort of way to cleverly use matrices and transformations. We'll start of with our generic 2 x 2 rotation matrix.
+
+\vspace{1em}
+
+\begin{figure}[h]
+	\vspace*{1em}
+	\begin{center}
+		\begin{minipage}[b]{0.45\textwidth}
+			\centering
+			
+			$$
+			\begin{bmatrix}
+			cos(\theta) & -sin(\theta) \\
+			sin(\theta) & cos(\theta)
+			\end{bmatrix}
+			$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}[b]{0.45\textwidth}
+			\centering
+			$$
+			\begin{bmatrix}
+			1 & 0 \\
+			0 & 1
+			\end{bmatrix}			
+			$$
+		\end{minipage}
+	\end{center}
+	\vspace*{1em}
+\end{figure}
+
+\vspace{1em}
+
+A couple things that are important to note before we proceed are that this matrix rotates points in 2 dimensions and on the $xy$ plane--meaning around the $z$ axis. Since we need to go into 3D, we need to change this matrix to work for 3D points and we can do that by using the concept of an identity matrix. Shown as the top right matrix, we can multiply the rotation matrix by this and still obtain the same rotation matrix. A 3x3 identity matrix is the just the same and we can use that concept to come up with a rotation matrix for 3D. These new matrices are shown below.
+
+\begin{figure}[h]
+	\vspace*{1em}
+	\begin{center}
+		\begin{minipage}[b]{0.45\textwidth}
+			\centering
+			
+			$$
+			\begin{bmatrix}
+			cos(\theta) & -sin(\theta) & 0 \\
+			sin(\theta) & cos(\theta) & 0 \\ 
+			0 & 0 & 1
+			\end{bmatrix}
+			$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}[b]{0.45\textwidth}
+			\centering
+			$$
+			\begin{bmatrix}
+			1 & 0 & 0 \\
+			0 & 1 & 0 \\
+			0 & 0 & 1
+			\end{bmatrix}			
+			$$
+		\end{minipage}
+	\end{center}
+	\vspace*{1em}
+\end{figure}
+
+Just like we can add on another row and column to the identity matrix, to get the matrix for the new dimension, we can do the same for the rotation matrix. To prove this works, we can take any point and verify its coordinates using both matrices.
 
 \subsection*{Generate Points Function}
 
@@ -73,3 +146,33 @@ There are many aspects of the code that we had to come up with in order to displ
 \subsection*{Create Composite Matrix Function}
 
 \end{document}
+
+\iffalse
+\begin{figure}[h]
+	\begin{center}
+		\begin{minipage}[b]{0.45\textwidth}
+			\centering
+			
+			$$\theta$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}[b]{0.45\textwidth}
+			\centering
+			$$\theta$$
+		\end{minipage}
+	\end{center}
+	\vspace*{-2\baselineskip}
+	\begin{center}
+		\begin{minipage}[t]{0.45\textwidth}
+			\caption{Transportation matrix $B$.}
+			\label{fig:adjacency_b}
+		\end{minipage}
+		\hfill
+		\begin{minipage}[t]{0.45\textwidth}
+			\caption{Graph of matrix $B$.}
+			\label{fig:directed}
+		\end{minipage}
+	\end{center}
+	\vspace*{-2\baselineskip}
+\end{figure}
+\fi
