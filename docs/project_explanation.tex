@@ -135,6 +135,127 @@ A couple things that are important to note before we proceed are that this matri
 
 Just like we can add on another row and column to the identity matrix, to get the matrix for the new dimension, we can do the same for the rotation matrix. To prove this works, we can take any point and verify its coordinates using both matrices.
 
+\vspace*{1em}
+
+\begin{equation}
+	\begin{bmatrix}
+	cos(\theta) & -sin(\theta) & 0 \\
+	sin(\theta) & cos(\theta) & 0 \\ 
+	0 & 0 & 1
+	\end{bmatrix}
+	\begin{bmatrix}
+	1 \\
+	0 \\ 
+	0
+	\end{bmatrix}	
+	=
+	\begin{bmatrix}
+	cos(\theta) \\
+	sin(\theta) \\ 
+	0
+	\end{bmatrix}
+\end{equation}
+
+\vspace*{1em}
+
+\begin{equation}
+	\begin{bmatrix}
+	cos(\frac{\pi}{2}) & -sin(\frac{\pi}{2}) & 0 \\
+	sin(\frac{\pi}{2}) & cos(\frac{\pi}{2}) & 0 \\ 
+	0 & 0 & 1
+	\end{bmatrix}
+	\begin{bmatrix}
+	1 \\
+	0 \\ 
+	0
+	\end{bmatrix}	
+	=
+	\begin{bmatrix}
+	cos(\frac{\pi}{2}) \\
+	sin(\frac{\pi}{2}) \\ 
+	0
+	\end{bmatrix}
+\end{equation}
+
+\vspace*{1em}
+
+\begin{equation}
+	\begin{bmatrix}
+	0 & -1 & 0 \\
+	1 & 0 & 0 \\ 
+	0 & 0 & 1
+	\end{bmatrix}
+	\begin{bmatrix}
+	1 \\
+	0 \\ 
+	0
+	\end{bmatrix}	
+	=
+	\begin{bmatrix}
+	0 \\
+	1 \\ 
+	0
+	\end{bmatrix}
+\end{equation}
+
+\vspace*{1em}
+
+As we can see above, we get the correct answer of (0, 1, 0) after rotating the point (1, 0, 0) by $\frac{\pi}{2}$ radians counter clockwise. Similarly, we can do this to the rotation matrices of not only the $z$ axis but also the $y$ and $x$ axes. Once we do this, we get the 3 rotation matrices for the $x$, $y$, and $z$ axes.
+
+\begin{figure}[h]
+	\vspace*{1em}
+	\begin{center}
+		\begin{minipage}[b]{0.3\textwidth}
+			\centering
+			
+			$$
+			\begin{bmatrix}
+			1 & 0 & 0 \\
+			0 & cos(\theta) & -sin(\theta) \\ 
+			0 & sin(\theta) & cos(\theta)
+			\end{bmatrix}
+			$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}[b]{0.3\textwidth}
+			\centering
+			$$
+			\begin{bmatrix}
+			cos(\theta) & 0 & sin(\theta) \\
+			0 & 1 & 0 \\
+			-sin(\theta) & 0 & cos(\theta)
+			\end{bmatrix}			
+			$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}[b]{0.3\textwidth}
+			\centering
+			$$
+			\begin{bmatrix}
+			cos(\theta) & -sin(\theta) & 0 \\
+			sin(\theta) & cos(\theta) & 0 \\
+			0 & 0 & 1
+			\end{bmatrix}			
+			$$
+		\end{minipage}
+	\end{center}
+	\begin{center}
+		\begin{minipage}[t]{0.3\textwidth}
+			\caption*{Rotation Matrix $X$.}
+		\end{minipage}
+		\hfill
+		\begin{minipage}[t]{0.3\textwidth}
+			\caption*{Rotation Matrix $Y$.}
+		\end{minipage}
+		\hfill
+		\begin{minipage}[t]{0.3\textwidth}
+			\caption*{Rotation Matrix $Z$.}
+		\end{minipage}
+	\end{center}
+\end{figure}
+
+(NOTE: Derivations of these matrices have been left out to keep paper length minimal). Now that we have our 3 main matrices, we can go back to the problem of a computer's coordinate system. If we were to use just these matrices themselves, our points would be rotating about the origin and the center of the cube would not stay fixed. So how might we solve this problem? The solution, we found, is to use translations. With translations, we can move every single coordinate to its prospective location around the origin. Then, we can rotate it using the matrices above. Finally, we have to bring the cube back to where it was so we use another translation matrix to do the exact same thing as the first, but in the opposite direction. 
+
 \subsection*{Generate Points Function}
 
 
