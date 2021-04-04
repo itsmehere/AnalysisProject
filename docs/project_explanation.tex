@@ -4,6 +4,8 @@
             left=1in,right=1in,top=1in,bottom=1in,%
             footskip=.25in]{geometry}
 \usepackage[english]{babel}
+\usepackage[section]{placeins}
+\usepackage{float}
 \usepackage[utf8x]{inputenc}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -58,7 +60,7 @@ For our Analysis H project, Steve and I decided to dive into the realm of comput
 
 There are many aspects of the code that we had to come up with in order to display an animated 3D object on a 2D screen. Some of these aspects rely more on math than others and this document will go over those functions in \textcolor{blue}{\href{https://github.com/itsmehere/SpinningCube/blob/main/cubeProj.py}{this code}}.
 
-\subsection*{Coordinate Setup}
+\subsection*{Coordinate Setup \& Create Composite Matrix}
 
 \begin{figure}[!htb]
     \centering
@@ -254,7 +256,127 @@ As we can see above, we get the correct answer of (0, 1, 0) after rotating the p
 	\end{center}
 \end{figure}
 
-(NOTE: Derivations of these matrices have been left out to keep paper length minimal). Now that we have our 3 main matrices, we can go back to the problem of a computer's coordinate system. If we were to use just these matrices themselves, our points would be rotating about the origin and the center of the cube would not stay fixed. So how might we solve this problem? The solution, we found, is to use translations. With translations, we can move every single coordinate to its prospective location around the origin. Then, we can rotate it using the matrices above. Finally, we have to bring the cube back to where it was so we use another translation matrix to do the exact same thing as the first, but in the opposite direction. 
+(NOTE: Derivations of these 	matrices have been left out to keep paper length minimal). Now that we have our 3 main matrices, we can go back to the problem of a computer's coordinate system. If we were to use just these matrices themselves, our points would be rotating about the origin and the center of the cube would not stay fixed. So how might we solve this problem? One way to solve this problem is using translation matrices. First, we translate the entire cube to the origin, rotate it at the origin, and then translate the entire cube back by using the inverse of the first translation matrix. To create these translation matrices, we need to refer back to Figure 1(b). Since, once again, (0,0) is the top left of the screen, the center would be the point ($\frac{w}{2}$, $\frac{h}{2}$, $\frac{d}{2}$) where $w$, $h$, and $d$ are the width, height and depth of the screen, respectively. Now that we know how much to translate by, we need to figure how to write these matrices.
+
+\begin{figure}[h]
+	\vspace*{1em}
+	\begin{center}
+		\begin{minipage}[b]{0.45\textwidth}
+			\centering
+			
+			$$
+			\begin{bmatrix}
+			1 & 0 & x \\
+			0 & 1 & y \\ 
+			0 & 0 & 1
+			\end{bmatrix}
+			$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}[b]{0.45\textwidth}
+			\centering
+			$$
+			\begin{bmatrix}
+			1 & 0 & -x \\
+			0 & 1 & -y \\ 
+			0 & 0 & 1
+			\end{bmatrix}			
+			$$
+		\end{minipage}
+	\end{center}
+	\vspace*{1em}
+\end{figure}
+
+Above, we have a translation matrix(left) that translates by $x$ units in the $x$ direction and $y$ units in the $y$ direction, followed by its inverse(right) that translates by $-x$ units in the $x$ direction and $-y$ units in the $y$ direction. However, recall that to translate a 2D point, we need to go into 3D. These matrices above only translate in 2 dimensions--the $x$ direction and the $y$ direction--but that's not what we want. We want to translate a 3 dimensional point and for that, we must go into 4D. The new translational matrices are shown below.
+
+\begin{figure}[H]
+	\vspace*{1em}
+	\begin{center}
+		\begin{minipage}[b]{0.45\textwidth}
+			\centering	
+			$$
+			\begin{bmatrix}
+			1 & 0 & 0 & x \\
+			0 & 1 & 0 & y \\ 
+			0 & 0 & 1 & z \\
+			0 & 0 & 0 & 1
+			\end{bmatrix}			
+			$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}[b]{0.45\textwidth}
+			\centering
+			$$
+			\begin{bmatrix}
+			1 & 0 & 0 & -x \\
+			0 & 1 & 0 & -y \\ 
+			0 & 0 & 1 & -z \\
+			0 & 0 & 0 & 1
+			\end{bmatrix}			
+			$$
+		\end{minipage}
+	\end{center}
+	\begin{center}
+		\begin{minipage}[t]{0.45\textwidth}
+			\caption*{Translation Matrix 1.}
+		\end{minipage}
+		\hfill
+		\begin{minipage}[t]{0.45\textwidth}
+			\caption*{Translation Matrix 2.}
+		\end{minipage}
+	\end{center}
+\end{figure}
+
+We can prove that these matrices do their job by applying both of them onto the point ($\frac{w}{2}$, $\frac{h}{2}$, $\frac{d}{2}$) to see if we get the same point back. Since we want to translate to the origin first, we'll perform the transformation $T_2 \circ T_1$.
+
+\vspace*{1em}
+
+\begin{equation}
+\begin{aligned}
+	\left( \begin{bmatrix}
+			1 & 0 & 0 & x \\
+			0 & 1 & 0 & y \\ 
+			0 & 0 & 1 & z \\
+			0 & 0 & 0 & 1
+	\end{bmatrix}
+	\begin{bmatrix}
+			1 & 0 & 0 & -x \\
+			0 & 1 & 0 & -y \\ 
+			0 & 0 & 1 & -z \\
+			0 & 0 & 0 & 1
+	\end{bmatrix} \right)
+	\begin{bmatrix}
+			\frac{w}{2} \\[6pt]
+			\frac{h}{2} \\[6pt] 
+			\frac{d}{2}
+	\end{bmatrix}
+	&=
+	\begin{bmatrix}
+			\frac{w}{2} \\[6pt]
+			\frac{h}{2} \\[6pt]
+			\frac{d}{2}
+	\end{bmatrix} \\[6pt]
+	\begin{bmatrix}
+			1 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 0 \\ 
+			0 & 0 & 1 & 0 \\
+			0 & 0 & 0 & 1
+	\end{bmatrix}
+	\begin{bmatrix}
+			\frac{w}{2} \\[6pt]
+			\frac{h}{2} \\[6pt] 
+			\frac{d}{2}
+	\end{bmatrix}
+	&=
+	\begin{bmatrix}
+			\frac{w}{2} \\[6pt]
+			\frac{h}{2} \\[6pt]
+			\frac{d}{2}
+	\end{bmatrix}
+\end{aligned}
+\end{equation}
+
+
 
 \subsection*{Generate Points Function}
 
@@ -262,38 +384,4 @@ As we can see above, we get the correct answer of (0, 1, 0) after rotating the p
 
 \subsection*{Points Between Function}
 
-
-
-\subsection*{Create Composite Matrix Function}
-
 \end{document}
-
-\iffalse
-\begin{figure}[h]
-	\begin{center}
-		\begin{minipage}[b]{0.45\textwidth}
-			\centering
-			
-			$$\theta$$
-		\end{minipage}
-		\hfill
-		\begin{minipage}[b]{0.45\textwidth}
-			\centering
-			$$\theta$$
-		\end{minipage}
-	\end{center}
-	\vspace*{-2\baselineskip}
-	\begin{center}
-		\begin{minipage}[t]{0.45\textwidth}
-			\caption{Transportation matrix $B$.}
-			\label{fig:adjacency_b}
-		\end{minipage}
-		\hfill
-		\begin{minipage}[t]{0.45\textwidth}
-			\caption{Graph of matrix $B$.}
-			\label{fig:directed}
-		\end{minipage}
-	\end{center}
-	\vspace*{-2\baselineskip}
-\end{figure}
-\fi
