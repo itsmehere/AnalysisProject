@@ -10,6 +10,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
+\usepackage{MnSymbol}
 \usepackage{graphicx}
 \usepackage[makeroom]{cancel}
 \usepackage{booktabs}
@@ -60,7 +61,7 @@ For our Analysis H project, Steve and I decided to dive into the realm of comput
 
 There are many aspects of the code that we had to come up with in order to display an animated 3D object on a 2D screen. Some of these aspects rely more on math than others and this document will go over those functions in \textcolor{blue}{\href{https://github.com/itsmehere/SpinningCube/blob/main/cubeProj.py}{this code}}.
 
-\subsection*{Coordinate Setup \& Create Composite Matrix}
+\subsection*{Coordinate Setup \& Matrices}
 
 \begin{figure}[!htb]
     \centering
@@ -376,12 +377,57 @@ We can prove that these matrices do their job by applying both of them onto the 
 \end{aligned}
 \end{equation}
 
-
-
-\subsection*{Generate Points Function}
-
-
-
 \subsection*{Points Between Function}
+
+\begin{center}
+	\vspace{2em}
+	\begin{tikzpicture}
+        \begin{axis}[
+                width=\textwidth,
+                scale=0.40,
+                height=\textwidth,
+                xtick distance=10,
+                ytick distance=10,
+                xmin=-50.0,xmax=50,
+                ymin=-50.0,ymax=50,
+                grid=both,
+                grid style={line width=.1pt, draw=gray!10},
+                major grid style={line width=.2pt,draw=gray!50},
+                axis lines=middle,
+                minor tick num=5,
+                enlargelimits={abs=0.5},
+                axis line style={latex-latex},
+                ticklabel style={font=\tiny},
+                xlabel style={at={(ticklabel* cs:1)},anchor=north west},
+                ylabel style={at={(ticklabel* cs:1)},anchor=south west}
+            ]
+            
+			\node at (-25,30) [circle,fill,inner sep=1pt]{};
+		    \draw node[below] at (-28, 30) {$P_2$};
+		    
+		    \node at (20,-12) [circle,fill,inner sep=1pt]{};
+		    \draw node[below] at (20, -15) {$P_1$};
+		    
+		    \draw[blue, thick, dotted] (50,-40) --  (-46.429,50);
+            
+    		\end{axis}
+	\end{tikzpicture}
+	\vspace{2em}
+\end{center}
+
+Above, we have a graph of 2 points: $P_1$ and $P_2$. Given these two points, the pointsBetween function aims to return a list of $n$ number of points that are a distance $w$ apart from each other and that lay on the line formed by $P_1$ and $P_2$(as shown in blue). To do this, we'll define a few variables: Let $d =$ the distance between $P_1$ and $P_2$, $n =$ the distance between each point(given), and $w =$ the scale factor. Specifically, $w$ will tell us how to modify our vector, but we'll get back to this in a second.
+
+
+\begin{equation}
+\begin{aligned}
+	d &= \sqrt[2]{(x_{P1} - x_{P2})^2 + (y_{P1} - y_{P2})^2} \\
+	w &= \frac{d}{n} \\
+	n &= 2
+\end{aligned}
+\end{equation}
+
+\vspace{1em}
+
+Above, we use the pythagorean theorem to calculate $d$ which, once again, tells us the length of $\overline{\rm P_1P_2}$. Then, we calculate $w$ by dividing $d$ by $n$. Why? Well, when we divide $d$(the distance between the $P_1$ and $P_2$) by $n$(the distance we want between 2 points on $\overleftrightarrow{P_1P_2}$), we get a value which is equivalent to the number of points that we can generate between $P_1$ and $P_2$ when each point is a distance of $n$ away from its neighboring point. With this in mind, let's move on to the vector portion of this problem.
 
 \end{document}
