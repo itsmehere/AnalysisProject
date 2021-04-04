@@ -107,7 +107,7 @@ In the figures above, we see (a): our regular cartesian coordinate system where 
 
 A couple things that are important to note before we proceed are that this matrix rotates points in 2 dimensions and on the $xy$ plane--meaning around the $z$ axis. Since we need to go into 3D, we need to change this matrix to work for 3D points and we can do that by using the concept of an identity matrix. Shown as the top right matrix, we can multiply the rotation matrix by this and still obtain the same rotation matrix. A 3x3 identity matrix is the just the same and we can use that concept to come up with a rotation matrix for 3D. These new matrices are shown below.
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\vspace*{1em}
 	\begin{center}
 		\begin{minipage}[b]{0.45\textwidth}
@@ -423,9 +423,9 @@ Above, we have a graph of 2 points: $P_1$ and $P_2$. Given these two points, the
 			\centering	
 			$$
 				\begin{aligned}
-					n &= 10 \\
+					n &= 5 \\
 					\overrightarrow{v} &= <x_{P2} - x_{P1}, y_{P2} - y_{P1}> \\
-					w &= \frac{\overrightarrow{v}}{10}
+					\overrightarrow{w} &= \frac{\overrightarrow{v}}{5}
 				\end{aligned}
 			$$
 		\end{minipage}
@@ -434,16 +434,16 @@ Above, we have a graph of 2 points: $P_1$ and $P_2$. Given these two points, the
 			\centering
 			$$
 				\begin{aligned}
-					n &= 10 \\
+					n &= 5 \\
 					\overrightarrow{v} &= <-45, 42> \\
-					w &= <\frac{-45}{10}, \frac{42}{10}>
+					\overrightarrow{w} &= <\frac{-45}{5}, \frac{42}{5}>
 				\end{aligned}
 			$$
 		\end{minipage}
 	\end{center}
 \end{figure}
 
-Though there are many ways to approach this problem, we'll be solving it using vectors. Above, we went ahead and calculated $\overrightarrow{v}$ which tells us how to get to $P_2$ from $P_1$. In other words, if we moved $P_1$ 45 units to the left and 42 units up, we would land exactly on $P_2$. The reason finding this vector is useful is because vectors can be scaled while still maintaining their direction; which is exactly what we need. Given that we want $n$ points between $P_1$ and $P_2$, we can shrink this vector by a factor of 10(or stretch it bu a factor of $\frac{1}{10}$) to get a vector that is one tenth the size. Then, we can start from $P_1$ and repeatedly add this vector the points, while taking note of them, until we reach $P_2$, in which case the program would have ended.
+Now that we have $\overrightarrow{w}$, we can repeatedly add it to $P_1$ and take note of all the points it takes us to. For example, if $P_1 = (0, 0)$, $P_2 = (0, 10)$, and $n = 10$, the value of $w$ would be $<\frac{0}{10}, \frac{10}{10}>$ or $<0, 1>$. Now, we would start off at $P_1$ and add $w$ giving us the point $(0, 1)$. Adding it again and again, we'd get $(0, 2)$, $(0, 3)$, $(0, 4)$,..., and $(0, 10)$ which are our generated points! To tell our code when to stop adding $\overrightarrow{w}$, we can compare the newly generated point to $P_2$(our destination). Once a generated point $g$ + $\overrightarrow{w}$ = $P_2$, we know to stop. This idea is visually represented in Figure 2(b) through vectors. 
 
 \vspace{1em}
 
@@ -519,13 +519,11 @@ Though there are many ways to approach this problem, we'll be solving it using v
 		    
 		   				\draw[blue, thick, dotted] (50,-40) --  (-46.429,50);
 		    
-		    				\draw[line width=1.5pt,blue,-stealth](20,-12)--(12.689, -5.177);
-		    				\draw[line width=1.5pt,blue,-stealth](12.689, -5.177)--(5.379, 1.646);
-		    				\draw[line width=1.5pt,blue,-stealth](5.379, 1.646)--(-1.932, 8.47);
-		    				\draw[line width=1.5pt,blue,-stealth](-1.932, 8.47)--(-9.242, 15.293);
-		    				\draw[line width=1.5pt,blue,-stealth](-9.242, 15.293)--(-16.553, 22.116);
-		    				\draw[line width=1.5pt,blue,-stealth](-16.553, 22.116)--(-23.863, 28.939);
-		    				\draw[line width=1.5pt,blue,-stealth](-23.863, 28.939	)--(-23.863, 28.939);
+		    				\draw[line width=1.5pt,blue,-stealth](20,-12)--(11, -3.6);
+		    				\draw[line width=1.5pt,blue,-stealth](11, -3.6)--(2, 4.8);
+		    				\draw[line width=1.5pt,blue,-stealth](2, 4.8)--(-7, 13.2);
+		    				\draw[line width=1.5pt,blue,-stealth](-7, 13.2)--(-16, 21.6);
+		    				\draw[line width=1.5pt,blue,-stealth](-16, 21.6)--(-25, 30);
     					\end{axis}
 				\end{tikzpicture}
 			\end{center}
@@ -542,6 +540,5 @@ Though there are many ways to approach this problem, we'll be solving it using v
 	\end{center}
 \end{figure}
 
-
-
+But hmm, this is in 2D and not 3D. So how would we generate points just like we did but in a 3 dimensional space? Well, it turns out that the process is exactly the same. The only thing that would differ is that our points and vectors would have one more parameter: $z$. For example, $\overrightarrow{v}$ might look like $<x, y, z>$ instead of just $<x, y>$ and $\overrightarrow{w}$ might look like $<\frac{x}{n}, \frac{y}{n}, \frac{z}{n}>$ instead of just $<\frac{x}{n}, \frac{y}{n}>$. However, we can most definitely still use the concept of scaled vectors to solve this problem.
 \end{document}
