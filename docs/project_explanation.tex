@@ -53,7 +53,7 @@
 
 \section*{Overview}
 
-For our Analysis H project, Steve and I decided to dive into the realm of computer graphics and matrices' applications in this field. Specifically, we wrote code that generates 3D points, projects these 3D points onto a 2D surface(the computer screen), and transforms these points to display an animation(using matrices). We both were fascinated by the numerous applications of matrices and thought this will be a fun project to work on. After doing further research, we learned that Renderman, Pixar's animation software, is heavily based on matrices and linear algebra; so this seemed like an interesting field which we could dip our toes in. This document serves to explain how we came up with the math of this code, challenges we faced, and the ultimate solutions to those challenges. The next section is a brief introduction of how we approached the code and following that is the actual math behind it. Enjoy!
+For our Analysis H project, Steve and I decided to dive into the realm of computer graphics and matrices' applications in this field. Specifically, we wrote code that generates 3D points, projects these 3D points onto a 2D surface(the computer screen), and transforms these points to display an animation(using matrices). We both were fascinated by the numerous applications of matrices and thought this will be a fun project to work on. After doing further research, we learned that Renderman, Pixar's animation software, is heavily based on matrices and linear algebra; so this seemed like an interesting field which we could dip our toes in. This document serves to explain how we came up with the math in our code, challenges we faced, and the ultimate solutions to those challenges. The next section is a brief introduction of how we approached the code followed by the actual math behind it. Enjoy!
 
 \newpage
 
@@ -72,7 +72,7 @@ There are many aspects of the code that we had to come up with in order to displ
     \label{fig:example}%
 \end{figure}
 
-In the figures above, we see figure (a): our regular cartesian coordinate system where (0,0) is at the center of the screen and we have 4 quadrants. However, in figure (b), we see a generic computer coordinate system -- only the 4th quadrant is included, making the origin the top left of the screen. Though it may seem more complex to display animations at a point other than the origin, computer screen layouts actually make this problem easier(with a little bit more math of course) since we no longer have to deal with negative values. So why is this important? Well, if we wanted to display an object at the center of the screen, or in fact, any point other than the origin, we'd have to come up with some sort of way to cleverly use matrices and transformations. For now, we'll start of with the generic 2 x 2 rotation matrix.
+In the figures above, we see figure (a): our regular cartesian coordinate system where (0,0) is at the center of the screen and we have 4 quadrants. However, in figure (b), we see a generic computer coordinate system where only the 4th quadrant is included -- making the origin the top left of the screen. Though it may seem more complex to display animations at a point other than the origin, computer screen layouts actually make this problem easier(with a little bit more math of course) since we no longer have to deal with negative values. So why is this important? Well, if we wanted to display an object at the center of the screen, or in fact, any point other than the origin, we'd have to come up with some sort of way to cleverly use matrices and transformations. For now, we'll start with the 2 x 2 rotation matrix.
 
 \begin{figure}[h]
 	\begin{center}
@@ -99,7 +99,7 @@ In the figures above, we see figure (a): our regular cartesian coordinate system
 	\end{center}
 \end{figure}
 
-A couple things that are important to note before we proceed are that this matrix rotates points in 2 dimensions and on the $xy$ plane -- meaning around the $z$ axis. Since we need to go into 3D, we need to change this matrix to work for 3D points and we can do that by using the concept of an identity matrix. When we multiply the rotation matrix on the left by the 2 x 2 identity matrix on the right, we obviously will still obtain the same rotation matrix. Similarly, a 3 x 3 identity matrix would do the same thing. We can use this concept to come up with a rotation matrix for 3 dimensions. These new matrices are shown below.
+A couple things that are important to note before we proceed are that this matrix rotates points in 2 dimensions and on the $xy$ plane -- meaning around the $z$ axis. Since we need to go into 3D, this matrix has to work for 3D points and we can do that by using the concept of an identity matrix. When we multiply the rotation matrix on the left by the 2 x 2 identity matrix on the right, we obviously will still obtain the same rotation matrix. Similarly, a 3 x 3 identity matrix would do the same thing. We can use this concept to come up with a rotation matrix for 3 dimensions. These new matrices are shown below.
 
 \begin{figure}[H]
 	\vspace*{1em}
@@ -129,7 +129,7 @@ A couple things that are important to note before we proceed are that this matri
 	\end{center}
 \end{figure}
 
-Just like we can add on another row and column to the identity matrix(to get the matrix for the new dimension), we can also do this for the rotation matrix. To prove this works, let's take any point and verify its coordinates using both matrices. In the example below, we use the point $(1, 0, 0)$.
+Just like we can add on another row and column to the identity matrix(to get the matrix for the new dimension), we can add on another row and column to the rotation matrix. To prove this works, let's take any point and verify its coordinates. In the example below, we use the point $(1, 0, 0)$.
 
 \vspace*{1em}
 
@@ -250,7 +250,7 @@ As we can see above, we get the correct answer of (0, 1, 0) after rotating the p
 	\end{center}
 \end{figure}
 
-(NOTE: Derivations of these 	matrices have been left out to keep paper length minimal). Now that we have our 3 main matrices, we can go back to the problem of a computer's coordinate system. If we were to use just these matrices themselves, our points would be rotating about the origin and the center of the cube would not stay fixed. So how might we solve this problem? One way to solve this problem is using translation matrices. First, we translate the entire cube to the origin, rotate it at the origin, and then translate the entire cube back by using the inverse of the first translation matrix. To create these translation matrices, we need to refer back to Figure 1(b). Since, once again, (0,0) is the top left of the screen, the center would be the point ($\frac{w}{2}$, $\frac{h}{2}$, $\frac{d}{2}$) where $w$, $h$, and $d$ are the width, height and depth of the screen, respectively. Now that we know how much to translate by, we need to figure how to write these matrices.
+(NOTE: Derivations of these 	matrices have been left out to keep paper length minimal). Now that we have our 3 main matrices, we can go back to the problem of a computer's coordinate system. If we were to use just these matrices themselves, our points would be rotating about the origin and the center of the cube would not stay fixed. So how might we solve this problem? One way to solve this problem is using translation matrices. First, we translate the entire cube to the origin, rotate it at the origin, and then translate the entire cube back by using the inverse of the first translation matrix. To create these translation matrices, we need to refer back to Figure 1(b). Since, once again, (0,0) is the top left of the screen, the center would be the point ($\frac{w}{2}$, $\frac{h}{2}$, $\frac{d}{2}$) where $w$, $h$, and $d$ are the width, height, and depth of the screen, respectively. Now that we know how much to translate by, we need to figure how to write these matrices.
 
 \begin{figure}[H]
 	\begin{center}
@@ -322,8 +322,6 @@ Above, we have a translation matrix(left) that translates by $x$ units in the $x
 
 We can show that these matrices do their job by applying both of them onto the point ($\frac{w}{2}$, $\frac{h}{2}$, $\frac{d}{2}$) to see if we get the same point back. Since we want to translate to the origin first, we'll perform the transformation $T_2 \circ T_1$.
 
-\vspace*{1em}
-
 \begin{equation}
 \begin{aligned}
 	\left( \begin{bmatrix}
@@ -339,15 +337,17 @@ We can show that these matrices do their job by applying both of them onto the p
 			0 & 0 & 0 & 1
 	\end{bmatrix} \right)
 	\begin{bmatrix}
-			\frac{w}{2} \\[6pt]
-			\frac{h}{2} \\[6pt] 
-			\frac{d}{2}
+			\frac{w}{2} \\[5pt]
+			\frac{h}{2} \\[5pt]
+			\frac{d}{2} \\[5pt]
+			1
 	\end{bmatrix}
 	&=
 	\begin{bmatrix}
-			\frac{w}{2} \\[6pt]
-			\frac{h}{2} \\[6pt]
-			\frac{d}{2}
+			\frac{w}{2} \\[5pt]
+			\frac{h}{2} \\[5pt] 
+			\frac{d}{2} \\[5pt]
+			1
 	\end{bmatrix} \\[6pt]
 	\begin{bmatrix}
 			1 & 0 & 0 & 0 \\
@@ -356,15 +356,17 @@ We can show that these matrices do their job by applying both of them onto the p
 			0 & 0 & 0 & 1
 	\end{bmatrix}
 	\begin{bmatrix}
-			\frac{w}{2} \\[6pt]
-			\frac{h}{2} \\[6pt] 
-			\frac{d}{2}
+			\frac{w}{2} \\[5pt]
+			\frac{h}{2} \\[5pt]
+			\frac{d}{2} \\[5pt]
+			1
 	\end{bmatrix}
 	&=
 	\begin{bmatrix}
-			\frac{w}{2} \\[6pt]
-			\frac{h}{2} \\[6pt]
-			\frac{d}{2}
+			\frac{w}{2} \\[5pt]
+			\frac{h}{2} \\[5pt]
+			\frac{d}{2} \\[5pt]
+			1
 	\end{bmatrix}
 \end{aligned}
 \end{equation}
@@ -427,6 +429,8 @@ But hold on. Our translation matrices are in 4 dimensions but our rotation matri
 	\end{center}
 \end{figure}
 
+\vspace{-7mm}
+
 \subsection*{Points Between Function}
 
 \begin{center}
@@ -434,7 +438,7 @@ But hold on. Our translation matrices are in 4 dimensions but our rotation matri
 	\begin{tikzpicture}
         \begin{axis}[
                 width=\textwidth,
-                scale=0.35,
+                scale=0.36,
                 height=\textwidth,
                 xtick distance=10,
                 ytick distance=10,
@@ -465,7 +469,9 @@ But hold on. Our translation matrices are in 4 dimensions but our rotation matri
 	\vspace{2em}
 \end{center}
 
-Above, we have a graph of 2 points: $P_1$ and $P_2$. Given these two points, the pointsBetween function aims to return a list of $n$ number of points that lay on the line formed by $P_1$ and $P_2$(as shown in blue). To do this, we'll define a few variables: Let $n =$ the number of points we want(given), $\overrightarrow{v} = \overleftrightarrow{P_1P_2}$ and $\overrightarrow{w} = \frac{\overrightarrow{v}}{n}$ . Like stated, $\overrightarrow{w}$ is a scaled down version of $\overrightarrow{v}$ which will mainly be used to generate these points, but more on that in a second. For now, we'll calculate some of the values for these variables and then put them together to solve this problem. In the above diagram, $P_1 = (20, -12)$ and $P_2 = (-25, 30)$.
+Above, we have a graph of 2 points: $P_1$ and $P_2$. Given these two points, the pointsBetween function aims to return a list of $n$ number of points that lay on the line formed by $P_1$ and $P_2$(as shown in blue). To do this, we'll define a few variables: Let $n =$ the number of points we want(given), $\overrightarrow{v} = \overrightarrow{P_1P_2}$, and $\overrightarrow{w} = \frac{\overrightarrow{v}}{n}$ . Like stated, $\overrightarrow{w}$ is a scaled down version of $\overrightarrow{v}$ which will mainly be used to generate our points, but more on that in a second. For now, we'll calculate the values for these variables and then put them together to solve this problem. In the above diagram, $P_1 = (20, -12)$ and $P_2 = (-25, 30)$.
+
+\vspace{-2mm}
 
 \begin{figure}[H]
 	\begin{center}
@@ -493,7 +499,9 @@ Above, we have a graph of 2 points: $P_1$ and $P_2$. Given these two points, the
 	\end{center}
 \end{figure}
 
-Now that we have $\overrightarrow{w}$, we can repeatedly add it to $P_1$ and take note of all the points it takes us to. For example, if $P_1 = (0, 0)$, $P_2 = (0, 10)$, and $n = 10$, the value of $w$ would be $<\frac{0}{10}, \frac{10}{10}>$ or $<0, 1>$. Now, we would start off at $P_1$ and add $w$ giving us the point $(0, 1)$. Adding it again and again, we'd get $(0, 2)$, $(0, 3)$, $(0, 4)$,..., and $(0, 10)$ which are our generated points! To tell our code when to stop adding $\overrightarrow{w}$, we can compare the newly generated point to $P_2$(our destination). Once a generated point $g$ + $\overrightarrow{w}$ = $P_2$, we know to stop. This idea is visually represented in Figure 2(b) through vectors. 
+\vspace{-2mm}
+
+Now that we have $\overrightarrow{w}$, we can repeatedly add it to $P_1$ and take note of all the points it takes us to. For example, if $P_1 = (0, 0)$, $P_2 = (0, 10)$, and $n = 10$, the value of $w$ would be $<\frac{0}{10}, \frac{10}{10}>$ or $<0, 1>$. Now, we would start off at $P_1$ and add $w$ giving us the point $(0, 1)$. Adding it again and again, we'd get $(0, 2)$, $(0, 3)$, $(0, 4)$,..., and $(0, 10)$ which are our generated points! To tell our code when to stop adding $\overrightarrow{w}$, we can compare the newly generated point to $P_2$(our destination). Once a generated point plus $w$ equals $P_2$, or $g$ + $\overrightarrow{w}$ = $P_2$, we know to stop. This idea is visually represented in Figure 2(b) through vectors. 
 
 \vspace{1em}
 
@@ -592,16 +600,16 @@ Now that we have $\overrightarrow{w}$, we can repeatedly add it to $P_1$ and tak
 
 \vspace{-7mm}
 
-But hmm, this is in 2D and not 3D. So how would we generate points just like we did but in a 3 dimensional space? Well, it turns out that the process is exactly the same. The only thing that would differ is that our points and vectors would have one more parameter: $z$. For example, $\overrightarrow{v}$ might look like $<x, y, z>$ instead of just $<x, y>$ and $\overrightarrow{w}$ might look like $<\frac{x}{n}, \frac{y}{n}, \frac{z}{n}>$ instead of just $<\frac{x}{n}, \frac{y}{n}>$. However, we can most definitely still use the concept of scaled vectors to solve this problem.
+Now we generated points in 2D but not 3D, so how would we generate points just like we did but in a 3 dimensional space for our cube? Well, it turns out that the process is exactly the same. The only thing that would differ is that our points and vectors would have one more parameter: $z$. For example, $\overrightarrow{v}$ might look like $<x, y, z>$ instead of just $<x, y>$ and $\overrightarrow{w}$ might look like $<\frac{x}{n}, \frac{y}{n}, \frac{z}{n}>$ instead of just $<\frac{x}{n}, \frac{y}{n}>$. However, we can most definitely still use the concept of scaled vectors to solve this problem.
 
-\vspace{-2mm}
+\vspace{-1mm}
 
 \subsection*{Conclusion}
 
-\vspace{-2mm}
+\vspace{-1mm}
 
 \hspace{10mm}
 
-With 3 rotation matrices, 2 translation matrices, and while loops in code, we can easily build our spinning cube. If each point on our cube were to rotate a small amount of radians, in each iteration of a loop, the cube will look like it is spinning. This is similar to the idea of stop motion animation: where a series of pictures are taken with small adjustments and then played at a fast speed to make it look smooth. In conclusions, I learned a lot about how the math we're learning in Analysis can be applied in various different ways. Walking into this unit, I was not sure when I'd actually use the math we're learning but this project has changed my perspective on that question from \textit{when} to \textit{how}. Overall, this project was super fun to write code for and although everything isn't explained in this document, the majority of what we went through is. At the end of the day, I had fun while learning a lot, so what more could I ask for.
+With 3 rotation matrices, 2 translation matrices, and loops in the code, we can easily build our spinning cube. Since each iteration of a loop in a computer is executed very very quickly, we can rotate each point on our cube a small amount of radians per iteration, which will make the cube look like it is spinning. This is similar to the idea of stop motion animation: where a series of pictures are taken with small adjustments and then played at a fast speed to make it look continuous. In conclusion, I learned a lot about how the math we're learning in Analysis can be applied in various different ways. Walking into this unit, I was not sure when I would actually use the math we're learning, but this project has changed my perspective on that question from \textit{when} to \textit{how}. Overall, it was super fun to write code for this project and even more fun to explain the work that we did. I hope you enjoyed it!
 
 \end{document}
