@@ -72,12 +72,9 @@ There are many aspects of the code that we had to come up with in order to displ
     \label{fig:example}%
 \end{figure}
 
-In the figures above, we see (a): our regular cartesian coordinate system where (0,0) is at the center of the screen and we have 4 quadrants. However, in figure (b), we see a generic computer coordinate system--where (only the 4th quadrant is included making the origin the top left of the screen. Though it may seem more complex to display animations at a point other than the origin, computer screen layouts actually make this problem easier(with a little bit more math of course) since we no longer have to deal with negative values. So why is this important? Well, if we wanted to display an object at the center of the screen, or in fact, any point other than the origin, we'd have to come up with some sort of way to cleverly use matrices and transformations. We'll start of with our generic 2 x 2 rotation matrix.
-
-\vspace{1em}
+In the figures above, we see figure (a): our regular cartesian coordinate system where (0,0) is at the center of the screen and we have 4 quadrants. However, in figure (b), we see a generic computer coordinate system -- only the 4th quadrant is included, making the origin the top left of the screen. Though it may seem more complex to display animations at a point other than the origin, computer screen layouts actually make this problem easier(with a little bit more math of course) since we no longer have to deal with negative values. So why is this important? Well, if we wanted to display an object at the center of the screen, or in fact, any point other than the origin, we'd have to come up with some sort of way to cleverly use matrices and transformations. We'll start of with our generic 2 x 2 rotation matrix.
 
 \begin{figure}[h]
-	\vspace*{1em}
 	\begin{center}
 		\begin{minipage}[b]{0.45\textwidth}
 			\centering
@@ -100,12 +97,9 @@ In the figures above, we see (a): our regular cartesian coordinate system where 
 			$$
 		\end{minipage}
 	\end{center}
-	\vspace*{1em}
 \end{figure}
 
-\vspace{1em}
-
-A couple things that are important to note before we proceed are that this matrix rotates points in 2 dimensions and on the $xy$ plane--meaning around the $z$ axis. Since we need to go into 3D, we need to change this matrix to work for 3D points and we can do that by using the concept of an identity matrix. Shown as the top right matrix, we can multiply the rotation matrix by this and still obtain the same rotation matrix. A 3x3 identity matrix is the just the same and we can use that concept to come up with a rotation matrix for 3D. These new matrices are shown below.
+A couple things that are important to note before we proceed are that this matrix rotates points in 2 dimensions and on the $xy$ plane -- meaning around the $z$ axis. Since we need to go into 3D, we need to change this matrix to work for 3D points and we can do that by using the concept of an identity matrix. Shown as the top right matrix, we can multiply the rotation matrix by this and still obtain the same rotation matrix. A 3x3 identity matrix is the just the same and we can use that concept to come up with a rotation matrix for 3 dimensions. These new matrices are shown below.
 
 \begin{figure}[H]
 	\vspace*{1em}
@@ -133,10 +127,9 @@ A couple things that are important to note before we proceed are that this matri
 			$$
 		\end{minipage}
 	\end{center}
-	\vspace*{1em}
 \end{figure}
 
-Just like we can add on another row and column to the identity matrix, to get the matrix for the new dimension, we can do the same for the rotation matrix. To prove this works, we can take any point and verify its coordinates using both matrices.
+Just like we can add on another row and column to the identity matrix(to get the matrix for the new dimension), we can also do this for the rotation matrix. To prove this works, we can take any point and verify its coordinates using both matrices. In the example below, we use the point $(1, 0, 0)$.
 
 \vspace*{1em}
 
@@ -259,8 +252,7 @@ As we can see above, we get the correct answer of (0, 1, 0) after rotating the p
 
 (NOTE: Derivations of these 	matrices have been left out to keep paper length minimal). Now that we have our 3 main matrices, we can go back to the problem of a computer's coordinate system. If we were to use just these matrices themselves, our points would be rotating about the origin and the center of the cube would not stay fixed. So how might we solve this problem? One way to solve this problem is using translation matrices. First, we translate the entire cube to the origin, rotate it at the origin, and then translate the entire cube back by using the inverse of the first translation matrix. To create these translation matrices, we need to refer back to Figure 1(b). Since, once again, (0,0) is the top left of the screen, the center would be the point ($\frac{w}{2}$, $\frac{h}{2}$, $\frac{d}{2}$) where $w$, $h$, and $d$ are the width, height and depth of the screen, respectively. Now that we know how much to translate by, we need to figure how to write these matrices.
 
-\begin{figure}[h]
-	\vspace*{1em}
+\begin{figure}[H]
 	\begin{center}
 		\begin{minipage}[b]{0.45\textwidth}
 			\centering
@@ -285,13 +277,11 @@ As we can see above, we get the correct answer of (0, 1, 0) after rotating the p
 			$$
 		\end{minipage}
 	\end{center}
-	\vspace*{1em}
 \end{figure}
 
-Above, we have a translation matrix(left) that translates by $x$ units in the $x$ direction and $y$ units in the $y$ direction, followed by its inverse(right) that translates by $-x$ units in the $x$ direction and $-y$ units in the $y$ direction. However, recall that to translate a 2D point, we need to go into 3D. These matrices above only translate in 2 dimensions--the $x$ direction and the $y$ direction--but that's not what we want. We want to translate a 3 dimensional point and for that, we must go into 4D. The new translational matrices are shown below.
+Above, we have a translation matrix(left) that translates by $x$ units in the $x$ direction and $y$ units in the $y$ direction, followed by its inverse(right) that translates by $-x$ units in the $x$ direction and $-y$ units in the $y$ direction. However, recall that to translate a 2D point, we need to go into 3D. These matrices above only translate in 2 dimensions -- the $x$ direction and the $y$ direction -- but that's not what we want. We want to translate a 3 dimensional point and for that, we must go into 4D. The new translational matrices are shown below.
 
 \begin{figure}[H]
-	\vspace*{1em}
 	\begin{center}
 		\begin{minipage}[b]{0.45\textwidth}
 			\centering	
@@ -327,6 +317,8 @@ Above, we have a translation matrix(left) that translates by $x$ units in the $x
 		\end{minipage}
 	\end{center}
 \end{figure}
+
+\vspace*{-7mm}
 
 We can prove that these matrices do their job by applying both of them onto the point ($\frac{w}{2}$, $\frac{h}{2}$, $\frac{d}{2}$) to see if we get the same point back. Since we want to translate to the origin first, we'll perform the transformation $T_2 \circ T_1$.
 
@@ -377,6 +369,64 @@ We can prove that these matrices do their job by applying both of them onto the 
 \end{aligned}
 \end{equation}
 
+\vspace*{1em}
+
+But hold on. Our translation matrices are in 4 dimensions but our rotation matrices are only in 3 dimensions. How might we multiply them together to perform a transformation if they aren't the same dimensions? Since the translation matrices have to be in 4D, our only option is to somehow make the rotation matrices also 4D. We can do that by adding one more identity row and column like shown below.
+
+\begin{figure}[h]
+	\begin{center}
+		\begin{minipage}[b]{0.3\textwidth}
+			\centering
+			
+			$$
+			\begin{bmatrix}
+			1 & 0 & 0 & 0\\
+			0 & cos(\theta) & -sin(\theta) & 0\\ 
+			0 & sin(\theta) & cos(\theta) & 0\\
+			0 & 0 & 0 & 1
+			\end{bmatrix}
+			$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}[b]{0.3\textwidth}
+			\centering
+			$$
+			\begin{bmatrix}
+			cos(\theta) & 0 & sin(\theta)& 0 \\
+			0 & 1 & 0 & 0 \\
+			-sin(\theta) & 0 & cos(\theta) & 0 \\
+			0 & 0 & 0 & 1
+			\end{bmatrix}			
+			$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}[b]{0.3\textwidth}
+			\centering
+			$$
+			\begin{bmatrix}
+			cos(\theta) & -sin(\theta) & 0 & 0 \\
+			sin(\theta) & cos(\theta) & 0 & 0\\
+			0 & 0 & 1 & 0 \\
+			0 & 0 & 0 & 1
+			\end{bmatrix}			
+			$$
+		\end{minipage}
+	\end{center}
+	\begin{center}
+		\begin{minipage}[t]{0.3\textwidth}
+			\caption*{Rotation Matrix $X$}
+		\end{minipage}
+		\hfill
+		\begin{minipage}[t]{0.3\textwidth}
+			\caption*{Rotation Matrix $Y$}
+		\end{minipage}
+		\hfill
+		\begin{minipage}[t]{0.3\textwidth}
+			\caption*{Rotation Matrix $Z$}
+		\end{minipage}
+	\end{center}
+\end{figure}
+
 \subsection*{Points Between Function}
 
 \begin{center}
@@ -384,7 +434,7 @@ We can prove that these matrices do their job by applying both of them onto the 
 	\begin{tikzpicture}
         \begin{axis}[
                 width=\textwidth,
-                scale=0.40,
+                scale=0.35,
                 height=\textwidth,
                 xtick distance=10,
                 ytick distance=10,
@@ -541,4 +591,9 @@ Now that we have $\overrightarrow{w}$, we can repeatedly add it to $P_1$ and tak
 \end{figure}
 
 But hmm, this is in 2D and not 3D. So how would we generate points just like we did but in a 3 dimensional space? Well, it turns out that the process is exactly the same. The only thing that would differ is that our points and vectors would have one more parameter: $z$. For example, $\overrightarrow{v}$ might look like $<x, y, z>$ instead of just $<x, y>$ and $\overrightarrow{w}$ might look like $<\frac{x}{n}, \frac{y}{n}, \frac{z}{n}>$ instead of just $<\frac{x}{n}, \frac{y}{n}>$. However, we can most definitely still use the concept of scaled vectors to solve this problem.
+
+\subsection*{Conclusion}
+
+Through this project, I learned a lot about how the math we're learning in Analysis can be applied in various different ways. Walking into this unit, I was not sure when I'd actually use the math we're learning but this project has changed my perspective on that question from \textit{when} to \textit{how}. Overall, it was super fun to write all the code that we wrote and although everything isn't explained in this document, the majority of what we went through is. At the end of the day, it was super fun.
+
 \end{document}
